@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Regla de inicio del cómputo
   const startRuleRadio1 = document.querySelector('input[name="startRuleRadio"][value="1"]');
-  const startRuleRadio3 = document.querySelector('input[name="startRuleRadio"][value="3"]');
+  const startRuleRadio3 = document.querySelector('input[name="startRuleRadio"][value="2"]');
   const startRuleLabel1 = document.getElementById('startRuleLabel1');
   const startRuleLabel3 = document.getElementById('startRuleLabel3');
 
@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // 12 de Octubre para el TFJA
-      if (["TFJA"].includes(jurisdiction)) {
+      if (["TFJA", "PJF"].includes(jurisdiction)) {
         holidayMap.set(`${y}-10-12`, "Día de la Raza");
       }
 
@@ -349,11 +349,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Manejo de la Regla de Inicio del Cómputo (1er día vs 3er día) ---
   function setStartRule(rule, triggerRecompute = true) {
-    currentStartRule = parseInt(rule, 10) === 3 ? 3 : 1;
+    currentStartRule = parseInt(rule, 10) === 2 ? 2 : 1;
 
     if (startRuleRadio1 && startRuleRadio3) {
       startRuleRadio1.checked = (currentStartRule === 1);
-      startRuleRadio3.checked = (currentStartRule === 3);
+      startRuleRadio3.checked = (currentStartRule === 2);
     }
     if (startRuleLabel1 && startRuleLabel3) {
       if (currentStartRule === 1) {
@@ -378,13 +378,13 @@ document.addEventListener('DOMContentLoaded', () => {
     startRuleRadio1.addEventListener('change', () => setStartRule(1));
   }
   if (startRuleRadio3) {
-    startRuleRadio3.addEventListener('change', () => setStartRule(3));
+    startRuleRadio3.addEventListener('change', () => setStartRule(2));
   }
   if (startRuleLabel1) {
     startRuleLabel1.addEventListener('click', () => setStartRule(1));
   }
   if (startRuleLabel3) {
-    startRuleLabel3.addEventListener('click', () => setStartRule(3));
+    startRuleLabel3.addEventListener('click', () => setStartRule(2));
   }
 
   // --- Renderizado y Lógica de Presets según Jurisdicción ------------------------------------------
@@ -424,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (preset.startRule) {
           setStartRule(preset.startRule, false);
         } else if (selectedJurisdiction === "JUZGADOS") {
-          setStartRule(3, false);
+          setStartRule(2, false);
         }
 
         renderPresets();
@@ -587,7 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Si se selecciona Juzgados al 3er día, activar automáticamente regla al 3er día
     if (selectedJurisdiction === "JUZGADOS") {
-      setStartRule(3, false);
+      setStartRule(2, false);
     } else {
       setStartRule(1, false);
     }
@@ -639,7 +639,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const holidaysMap = getHolidaysMap(jurisdiction, startYear, endYear);
 
     // Calcular la fecha de inicio del plazo según la regla (1er día hábil o 3er día hábil)
-    const targetOffset = parseInt(startDayOffset, 10) === 3 ? 3 : 1;
+    const targetOffset = parseInt(startDayOffset, 10) === 2 ? 2 : 1;
     let current = new Date(notifDate);
     let businessDaysFound = 0;
     const intermediateBusinessDays = []; // Días hábiles previos al cómputo (1° y 2°)
